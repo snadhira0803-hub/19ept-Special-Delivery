@@ -34,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* Container holding the envelope and passcode form */
     .wrapper {
       position: relative;
       display: flex;
@@ -58,7 +57,7 @@
       position: relative;
       width: 280px;
       height: 180px;
-      background-color: #1a2f9b; /* Slightly darker shade for envelope interior */
+      background-color: #1a2f9b;
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 10px 25px rgba(0,0,0,0.4);
@@ -99,61 +98,55 @@
       z-index: 4;
     }
 
-    .envelope-seal {
-      position: absolute;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 40px;
-      background-color: #001489;
-      color: #ffffff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: bold;
-      z-index: 5;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-
     .tap-hint {
-      margin-top: 20px;
+      margin-top: 25px;
       color: #ffffff;
       font-size: 1.8rem;
     }
 
     /* ==========================================
-       PASSCODE CARD (Hidden inside envelope)
+       PASSCODE CARD
        ========================================== */
     .card {
       position: absolute;
       top: 10px;
+      left: 15px;
       width: 250px;
       background-color: #ffffff;
       border-radius: 12px;
-      padding: 25px 20px;
+      padding: 22px 18px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       z-index: 2;
       opacity: 0;
       transform: translateY(0);
       transition: transform 0.6s ease-in-out, opacity 0.4s ease;
-      font-family: 'Montserrat', sans-serif; /* Clean font for inputs */
+      font-family: 'Montserrat', sans-serif;
     }
 
     .card h2 {
       font-family: 'Caveat', cursive;
       font-size: 2.2rem;
       color: #001489;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
     }
 
-    .card p {
+    .card .subtitle {
       font-size: 0.85rem;
       color: #555555;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
+    }
+
+    /* Tiny clue text styled in handwriting font */
+    .clue-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.25rem;
+      color: #001489;
+      font-weight: bold;
+      background-color: #fff9d6;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 12px;
     }
 
     .passcode-input {
@@ -163,7 +156,7 @@
       border-radius: 6px;
       text-align: center;
       font-size: 1.1rem;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       margin-bottom: 12px;
       outline: none;
     }
@@ -201,16 +194,12 @@
        ========================================== */
     .envelope-container.open .envelope-flap {
       transform: rotateX(180deg);
-      z-index: 1; /* Move behind card once open */
-    }
-
-    .envelope-container.open .envelope-seal {
-      display: none;
+      z-index: 1;
     }
 
     .envelope-container.open .card {
       opacity: 1;
-      transform: translateY(-160px); /* Slides card upwards */
+      transform: translateY(-165px);
       z-index: 10;
     }
 
@@ -227,20 +216,22 @@
     <!-- Interactive Envelope -->
     <div class="envelope-container" id="envelope" onclick="openEnvelope()">
       <div class="envelope-flap"></div>
-      <div class="envelope-seal">CFC</div>
       <div class="envelope-pocket"></div>
       
       <!-- Hidden Passcode Card -->
       <div class="card" onclick="event.stopPropagation();">
         <h2>Enter Passcode</h2>
-        <p>Unlock with your birthday<br>(DDMMYYYY):</p>
+        <p class="subtitle">Enter the secret key to open:</p>
         
+        <!-- Tiny Clue -->
+        <div class="clue-text">Hint: Today's Date 🎂</div>
+
         <input 
           type="password" 
           id="passcode" 
           class="passcode-input" 
-          placeholder="e.g. 15081998" 
-          maxlength="8"
+          placeholder="DDMMYY" 
+          maxlength="6"
         />
         <button class="btn-unlock" onclick="checkPasscode()">Unlock</button>
         <p id="error" class="error-msg">Incorrect passcode! Try again 😉</p>
@@ -251,22 +242,19 @@
   </div>
 
   <script>
-    // 1. Function to open the envelope
     function openEnvelope() {
       const envelope = document.getElementById('envelope');
       envelope.classList.add('open');
     }
 
-    // 2. Passcode Validation
     function checkPasscode() {
       const input = document.getElementById('passcode').value;
       const errorMsg = document.getElementById('error');
       
-      // SET YOUR BF'S BIRTHDAY HERE (Format: DDMMYYYY)
-      const correctPasscode = "15081998"; 
+      // Passcode set to 190900 (Format: DDMMYY)
+      const correctPasscode = "190900"; 
 
       if (input === correctPasscode) {
-        // Redirects to Stage 1 page upon correct input
         window.location.href = "stage1.html"; 
       } else {
         errorMsg.style.display = "block";
