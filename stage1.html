@@ -5,17 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stage 1: Medan</title>
   
-  <!-- Google Fonts: Handwritten font (Caveat) + Clean font (Montserrat) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ==========================================
-       COLOR PALETTE & GLOBAL STYLES
-       Chelsea Blue: #001489
-       Yellow Accent: #FFD100
-       ========================================== */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -23,7 +18,7 @@
     }
 
     body {
-      background-color: #001489;
+      background-color: #001489; /* Chelsea Blue */
       font-family: 'Caveat', cursive;
       min-height: 100vh;
       display: flex;
@@ -52,21 +47,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
     }
 
-    .music-btn:hover {
-      transform: scale(1.1);
-    }
-
-    /* Container for Map Area */
+    /* Map Box Container */
     .map-wrapper {
       position: relative;
       width: 90%;
-      max-width: 600px;
-      height: 420px;
+      max-width: 500px;
+      height: 380px;
       background: #e8ecef url('https://tile.openstreetmap.org/13/6281/3820.png') center/cover;
-      border-radius: 16px;
+      border-radius: 20px;
       border: 4px solid #FFD100;
       box-shadow: 0 12px 30px rgba(0,0,0,0.4);
       overflow: hidden;
@@ -75,33 +65,47 @@
       align-items: center;
     }
 
-    .map-overlay {
+    /* Overlay Start Screen (To enable audio & start animation) */
+    .start-overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle, transparent 40%, rgba(0, 20, 137, 0.4) 100%);
-      pointer-events: none;
+      background-color: #001489;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #FFD100;
+      text-align: center;
+      padding: 20px;
     }
 
-    /* 1. CLOUD TRANSITION */
+    .btn-start {
+      margin-top: 15px;
+      background-color: #FFD100;
+      color: #001489;
+      border: none;
+      padding: 12px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* ☁️ EMOJI CLOUD CURTAIN */
     .cloud-curtain {
       position: absolute;
       inset: 0;
       background-color: #ffffff;
       z-index: 20;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
-    }
-
-    .cloud-shape {
-      width: 120%;
-      height: 100%;
-      background: #ffffff;
-      border-radius: 50% 50% 0 0;
-      position: absolute;
-      top: 0;
+      font-size: 5rem;
+      gap: 10px;
+      transition: transform 1.2s ease-in-out, opacity 1s ease;
     }
 
     .cloud-curtain.lift-off {
@@ -109,7 +113,7 @@
       opacity: 0;
     }
 
-    /* 2. MEDAN PIN POINT & RIPPLE */
+    /* 📍 MEDAN PIN POINT */
     .pin-container {
       position: absolute;
       top: 45%;
@@ -127,26 +131,9 @@
       animation: dropBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    .map-pin {
-      width: 42px;
-      height: 42px;
-      background-color: #d9534f;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 3px solid #ffffff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      position: relative;
-    }
-
-    .map-pin::after {
-      content: '';
-      width: 14px;
-      height: 14px;
-      background-color: #ffffff;
-      position: absolute;
-      border-radius: 50%;
-      top: 11px;
-      left: 11px;
+    .emoji-pin {
+      font-size: 3.5rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
     }
 
     .location-label {
@@ -155,21 +142,10 @@
       font-family: 'Montserrat', sans-serif;
       font-size: 0.85rem;
       font-weight: bold;
-      padding: 4px 10px;
-      border-radius: 12px;
-      margin-top: 8px;
+      padding: 6px 14px;
+      border-radius: 15px;
+      margin-top: 4px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    .pulse-ring {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border: 3px solid #d9534f;
-      border-radius: 50%;
-      top: 25px;
-      animation: pulsate 1.8s ease-out infinite;
-      z-index: -1;
     }
 
     @keyframes dropBounce {
@@ -177,17 +153,12 @@
       100% { transform: translate(-50%, -50%); }
     }
 
-    @keyframes pulsate {
-      0% { transform: scale(0.1); opacity: 1; }
-      100% { transform: scale(3); opacity: 0; }
-    }
-
-    /* 3. NARRATION BANNER */
+    /* NARRATION BOX */
     .narration-box {
       margin-top: 25px;
       background-color: #ffffff;
-      border-radius: 12px;
-      padding: 15px 30px;
+      border-radius: 16px;
+      padding: 18px 25px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       text-align: center;
       max-width: 90%;
@@ -219,39 +190,37 @@
       font-size: 0.95rem;
       border-radius: 20px;
       cursor: pointer;
-      display: inline-block;
-      transition: transform 0.2s;
-    }
-
-    .btn-next:hover {
-      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
 
-  <!-- Audio Element (Tulus - Cahaya) -->
+  <!-- Audio Element -->
   <audio id="bgMusic" loop>
     <source src="cahaya.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Music Control Button -->
+  <!-- Music Button -->
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
 
   <!-- Map Container -->
   <div class="map-wrapper">
-    <div class="map-overlay"></div>
-
-    <!-- Cloud Transition Curtain -->
-    <div class="cloud-curtain" id="cloudCurtain">
-      <div class="cloud-shape"></div>
+    
+    <!-- Start Click Overlay (Fixes Audio Auto-play Issue) -->
+    <div class="start-overlay" id="startOverlay">
+      <h2 style="font-size: 2.5rem;">Stage 1 🗺️</h2>
+      <button class="btn-start" onclick="startStage()">Tap to Open ✨</button>
     </div>
 
-    <!-- Medan Pin Point -->
+    <!-- ☁️ Emoji Cloud Curtain -->
+    <div class="cloud-curtain" id="cloudCurtain">
+      ☁️ ☁️ ☁️
+    </div>
+
+    <!-- 📍 Medan Pin -->
     <div class="pin-container" id="medanPin">
-      <div class="map-pin"></div>
-      <div class="pulse-ring"></div>
-      <div class="location-label">📍 Medan, Indonesia</div>
+      <div class="emoji-pin">📍</div>
+      <div class="location-label">Medan, Indonesia</div>
     </div>
   </div>
 
@@ -265,7 +234,6 @@
     const music = document.getElementById('bgMusic');
     const musicBtn = document.getElementById('musicBtn');
 
-    // Toggle Play/Pause for Music
     function toggleMusic() {
       if (music.paused) {
         music.play();
@@ -276,29 +244,29 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Called when he clicks "Tap to Open"
+    function startStage() {
+      // 1. Play the music immediately
+      music.play();
 
-      // Try playing audio automatically when page loads
-      music.play().catch(error => {
-        console.log("Autoplay waiting for user interaction:", error);
-      });
+      // 2. Hide the start overlay
+      document.getElementById('startOverlay').style.display = 'none';
 
-      // Step 1: Lift off clouds after 0.5s
+      // 3. Lift off the ☁️ clouds
       setTimeout(() => {
         document.getElementById('cloudCurtain').classList.add('lift-off');
-      }, 500);
+      }, 300);
 
-      // Step 2: Drop map pin (1.5s mark)
+      // 4. Drop the 📍 pin onto Medan
       setTimeout(() => {
         document.getElementById('medanPin').classList.add('drop');
-      }, 1500);
+      }, 1200);
 
-      // Step 3: Reveal narration text (2.3s mark)
+      // 5. Reveal the narration box
       setTimeout(() => {
         document.getElementById('narrationBox').classList.add('show');
-      }, 2300);
-
-    });
+      }, 2000);
+    }
 
     function goToNextStage() {
       window.location.href = "stage2.html"; 
