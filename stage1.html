@@ -1,277 +1,209 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stage 1: Medan</title>
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: #001489; /* Chelsea Blue */
-      font-family: 'Caveat', cursive;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Floating Music Toggle Button */
-    .music-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #FFD100;
-      color: #001489;
-      border: none;
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Map Box Container */
-    .map-wrapper {
-      position: relative;
-      width: 90%;
-      max-width: 500px;
-      height: 380px;
-      background: #e8ecef url('https://tile.openstreetmap.org/13/6281/3820.png') center/cover;
-      border-radius: 20px;
-      border: 4px solid #FFD100;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Overlay Start Screen (To enable audio & start animation) */
-    .start-overlay {
-      position: absolute;
-      inset: 0;
-      background-color: #001489;
-      z-index: 30;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #FFD100;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .btn-start {
-      margin-top: 15px;
-      background-color: #FFD100;
-      color: #001489;
-      border: none;
-      padding: 12px 28px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: bold;
-      font-size: 1rem;
-      border-radius: 25px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    /* ☁️ EMOJI CLOUD CURTAIN */
-    .cloud-curtain {
-      position: absolute;
-      inset: 0;
-      background-color: #ffffff;
-      z-index: 20;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 5rem;
-      gap: 10px;
-      transition: transform 1.2s ease-in-out, opacity 1s ease;
-    }
-
-    .cloud-curtain.lift-off {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-
-    /* 📍 MEDAN PIN POINT */
-    .pin-container {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 10;
-      opacity: 0;
-    }
-
-    .pin-container.drop {
-      opacity: 1;
-      animation: dropBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-
-    .emoji-pin {
-      font-size: 3.5rem;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    }
-
-    .location-label {
-      background-color: #001489;
-      color: #FFD100;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem;
-      font-weight: bold;
-      padding: 6px 14px;
-      border-radius: 15px;
-      margin-top: 4px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    @keyframes dropBounce {
-      0% { transform: translate(-50%, -200px); }
-      100% { transform: translate(-50%, -50%); }
-    }
-
-    /* NARRATION BOX */
-    .narration-box {
-      margin-top: 25px;
-      background-color: #ffffff;
-      border-radius: 16px;
-      padding: 18px 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      text-align: center;
-      max-width: 90%;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .narration-box.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .narration-text {
-      color: #001489;
-      font-size: 2.2rem;
-      font-weight: bold;
-      line-height: 1.2;
-    }
-
-    .btn-next {
-      margin-top: 15px;
-      background-color: #FFD100;
-      color: #001489;
-      border: none;
-      padding: 10px 24px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: bold;
-      font-size: 0.95rem;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You, My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Audio Element -->
-  <audio id="bgMusic" loop>
-    <source src="cahaya.mp3" type="audio/mpeg">
-  </audio>
+    <audio id="bg-music">
+        <source src="assets/lagu/lagu.mp3" type="audio/mpeg">
+    </audio>
 
-  <!-- Music Button -->
-  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+    <div class="petals" id="petals-container"></div>
 
-  <!-- Map Container -->
-  <div class="map-wrapper">
-    
-    <!-- Start Click Overlay (Fixes Audio Auto-play Issue) -->
-    <div class="start-overlay" id="startOverlay">
-      <h2 style="font-size: 2.5rem;">Stage 1 🗺️</h2>
-      <button class="btn-start" onclick="startStage()">Tap to Open ✨</button>
+    <div id="cover-screen" onclick="showPopup()">
+        <div class="gift-box" id="gift-icon">🤍</div>
+        <div class="tap-text" id="tap-text">Happy birthday kesayangan aku🤍</div>
     </div>
 
-    <!-- ☁️ Emoji Cloud Curtain -->
-    <div class="cloud-curtain" id="cloudCurtain">
-      ☁️ ☁️ ☁️
+    <div id="popup-overlay" class="hidden">
+    <div id="popup-box">
+        <h3 class="serif">Choose your gift</h3>
+        <div class="popup-buttons">
+            <button id="btn-yes" class="popup-btn" onclick="confirmOpenGift()"💌</button>
+            <button id="btn-no" class="popup-btn"🎞️</button>
+        </div>
+    </div>
+</div>
+
+    <div id="main-content">
+        
+        <div class="music-widget">
+            <div class="music-top">
+                <img id="player-cover" src="assets/cover/cover1.jpg" alt="Album Art">
+                <div class="music-info">
+                    <span class="title" id="player-title">Cahaya</span>
+                    <span class="artist" id="player-artist">Tulus</span>
+                </div>
+            </div>
+
+            <div class="progress-wrapper">
+    <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
+    <div class="time-display">
+        <span id="current-time">0:00</span>
+        <span id="duration">0:00</span>
+    </div>
+</div>
+
+            <div class="controls">
+                <span onclick="prevSong()">⏮</span>
+                <span id="play-pause-btn" onclick="toggleMusic()">⏸</span>
+                <span onclick="nextSong()">⏭</span>
+            </div>
+        </div>
+
+        <section class="hero-section">
+            <p class="subtitle">A love letter for the love of my life</p>
+            <h1 class="title-main serif">for<br>you</h1>
+            <h1 class="title-main serif">Adam Gilang Ditsani</h1>
+            <img src="assets/foto/fotoawal.jpg" alt="you" style="width: 160px; height: 160px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 0 25px rgba(229,115,115,0.4); margin-bottom: 25px;">
+            <p class="text-body" style="margin-top:10px;">Setiap kelopak bunga menyimpan bisikan tentang betapa berartinya dirimu bagiku.</p>
+            <div style="font-size: 24px; margin-top:20px;">🌸</div>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">our melodies</p>
+            <h2 class="title-sub serif">Songs that remind me of you</h2>
+            <p class="subtitle">click cover art untuk change songs</p>
+            <div class="playlist-grid">
+
+                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu1.mp3', 'Hanya Untuk-Mu', 'Ten2Five', 'assets/cover/cover1.jpg')">
+                    <img src="assets/cover/cover1.jpg" alt="Cover Hanya Untuk-Mu" style="filter: none;">
+                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Hanya Untuk-Mu</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Ten2Five</p>
+                </div>
+
+                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu2.mp3', 'Aku Milikmu', 'Dewa19', 'assets/cover/cover2.jpg')">
+                    <img src="assets/cover/cover2.jpg" alt="Cover Aku Milikmu" style="filter: none;">
+                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Aku Milikmu</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Dewa19</p>
+                </div>
+
+                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu3.mp3', 'Kangen', 'Dewa19', 'assets/cover/cover3.jpg')">
+                    <img src="assets/cover/cover3.jpg" alt="Cover Kangen" style="filter: none;">
+                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Kangen</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Dewa19</p>
+                </div>
+                
+                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu4.mp3', 'Keabadian', 'Reza Artamevia', 'assets/cover/cover4.jpg')">
+                    <img src="assets/cover/cover4.jpg" alt="Cover Keabadian" style="filter: none;">
+                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Keabadian</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Reza Artamevia</p>
+                </div>
+
+                <div class="photo-item" style="cursor: pointer;" onclick="changeSong('assets/lagu/lagu5.mp3', 'Sempurna', 'Andra & The Backbone', 'assets/cover/cover5.jpg')">
+                    <img src="assets/cover/cover5.jpg" alt="Cover Sempurna" style="filter: none;">
+                    <p class="photo-caption" style="font-size: 16px; margin-top: 10px; color: #fff; font-family: 'Montserrat', sans-serif;">Sempurna</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Andra & The Backbone</p>
+                </div>
+
+            </div>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">🌸 from my heart 🌸</p>
+            <h2 class="title-sub serif">You are <br>one of my prayers<br>come true.</h2>
+            <p class="text-body">
+                In a world full of ordinary moments, you are the extraordinary one. The way you laugh, the way you care, the way you simply exist — it fills every corner of my world with something I never knew I needed.<br><br>
+                These flowers are not enough. No words ever could be. But they carry every unspoken feeling I hold for you, pressed between their petals like tiny love letters waiting to be found.<br><br> Semua Yang Kumau Hanyalah Dirimu.
+            </p>
+            <p class="serif" style="margin-top: 40px; font-style: italic; font-size: 24px; color: var(--text-muted);">
+                - Selalu Dirimu -
+            </p>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">masih banyak yang tak bisa ku ungkapkan namun ini beberapa alasan</p>
+            <h2 class="title-sub serif">Why I Love You</h2>
+            <div class="reasons-grid">
+                <div class="card"><div class="card-icon">✨</div><h3 class="serif">Your Jokes</h3><p>It lights up every room and every corner of my heart simultaneously.</p></div>
+                <div class="card"><div class="card-icon">🌟</div><h3 class="serif">Your Soul</h3><p>Rare, genuine, the kind that inspires me.</p></div>
+                <div class="card"><div class="card-icon">💖</div><h3 class="serif">Your Kindness</h3><p>The way you love the world makes me want to be better every single day.</p></div>
+                <div class="card"><div class="card-icon">🎵</div><h3 class="serif">Your Laughter</h3><p>The best sound in existence. My favourite melody, always.</p></div>
+                <div class="card"><div class="card-icon">💪</div><h3 class="serif">Your Strength</h3><p>You carry so much grace through everything. I admire you endlessly.</p></div>
+                <div class="card"><div class="card-icon">🌸</div><h3 class="serif">Simply You</h3><p>Every version of you, every moment - you are more than enough.</p></div>
+            </div>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">Waktu terhenti di balik lensa, namun rasanya tak pernah pudar oleh masa.</p>
+            <h2 class="title-sub serif">Baby You're<br>Divine</h2>
+            <div class="photo-grid">
+                <div class="photo-item"><img src="assets/foto/foto1.jpg" alt="You"><p class="photo-caption">you</p></div>
+                <div class="photo-item"><img src="assets/foto/foto2.jpg" alt="Are"><p class="photo-caption">are</p></div>
+                <div class="photo-item"><img src="assets/foto/foto3.jpg" alt="So"><p class="photo-caption">so</p></div>
+                <div class="photo-item"><img src="assets/foto/foto4.jpg" alt="Beautiful"><p class="photo-caption">beautiful</p></div>
+                <div class="photo-item"><img src="assets/foto/foto5.jpg" alt="Like"><p class="photo-caption">like</p></div>
+                <div class="photo-item"><img src="assets/foto/foto6.jpg" alt="An"><p class="photo-caption">an</p></div>
+                <div class="photo-item"><img src="assets/foto/foto7.jpg" alt="Angel"><p class="photo-caption">angel</p></div>
+                <div class="photo-item"><img src="assets/foto/foto8.jpg" alt="🤍"><p class="photo-caption">🤍</p></div>
+            </div>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">our memories</p>
+            <h2 class="title-sub serif">Memories That Last Forever</h2>
+            <div class="video-grid" style="margin-top: 30px;">
+                <div class="video-container" style="margin: 0; max-width: 100%;">
+                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
+                        <source src="assets/video/video2.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-container" style="margin: 0; max-width: 100%;">
+                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
+                        <source src="assets/video/video3.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-container" style="margin: 0; max-width: 100%;">
+                    <video controls controlsList="nodownload" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover;">
+                        <source src="assets/video/video4.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-container" style="margin: 0; max-width: 100%;">
+                    <img src="assets/foto/fotospec.jpg" alt="LUCUU BANGETTT😫😫" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block;">
+                </div>
+            </div>
+            <p class="text-body" style="font-size: 13px; margin-top: 20px;">Every second with you is a treasure.</p>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <p class="subtitle">a prayer for you</p>
+            <h2 class="title-sub serif">Doa Terbaikku</h2>
+            <div style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--accent); padding: 30px 40px; margin-top: 20px; max-width: 600px; border-radius: 0 15px 15px 0; box-shadow: 5px 5px 20px rgba(0,0,0,0.2);">
+                <p class="serif" style="font-size: 24px; font-style: italic; line-height: 1.8; color: #fff;">
+                    "Semoga di usia mu yang baru, Allah selalu menyertai setiap niat baikmu. Semoga kamu selalu dikelilingi kebaikan, kebahagiaan, kehangatan, seperti bagaimana kamu membawa itu kemana pun kamu pergi."
+                </p>
+            </div>
+            <p class="text-body" style="font-size: 14px; margin-top: 25px;">Amin paling serius untuk semua mimpimu. Selamat bertambah usia, Sayangku.</p>
+            <button class="next-btn" onclick="nextSection(this)">🤍</button>
+        </section>
+
+        <section>
+            <div style="font-size: 28px; letter-spacing: 10px; margin-bottom: 20px;">🌸🌺🌹</div>
+            <p class="subtitle">always & forever</p>
+            <h1 class="title-sub serif">You Are Loved<br>Beyond Words</h1>
+            <p class="text-body" style="font-size: 14px; max-width: 600px;">
+                No matter where life takes us, know that somewhere in the universe, there is a garden blooming with every feeling I have ever held for you. You deserve the world. You deserve all the flowers. You deserve everything.
+            </p>
+            <p class="serif" style="margin-top: 50px; font-style: italic; color: var(--text-muted); font-size:18px;">
+                made with love, just for you 🤍
+            </p>
+        </section>
+        
     </div>
 
-    <!-- 📍 Medan Pin -->
-    <div class="pin-container" id="medanPin">
-      <div class="emoji-pin">📍</div>
-      <div class="location-label">Medan, Indonesia</div>
-    </div>
-  </div>
-
-  <!-- Narration Banner -->
-  <div class="narration-box" id="narrationBox">
-    <div class="narration-text">"26 years ago, a boy was born..."</div>
-    <button class="btn-next" onclick="goToNextStage()">Continue ✨</button>
-  </div>
-
-  <script>
-    const music = document.getElementById('bgMusic');
-    const musicBtn = document.getElementById('musicBtn');
-
-    function toggleMusic() {
-      if (music.paused) {
-        music.play();
-        musicBtn.textContent = '🎵';
-      } else {
-        music.pause();
-        musicBtn.textContent = '🔇';
-      }
-    }
-
-    // Called when he clicks "Tap to Open"
-    function startStage() {
-      // 1. Play the music immediately
-      music.play();
-
-      // 2. Hide the start overlay
-      document.getElementById('startOverlay').style.display = 'none';
-
-      // 3. Lift off the ☁️ clouds
-      setTimeout(() => {
-        document.getElementById('cloudCurtain').classList.add('lift-off');
-      }, 300);
-
-      // 4. Drop the 📍 pin onto Medan
-      setTimeout(() => {
-        document.getElementById('medanPin').classList.add('drop');
-      }, 1200);
-
-      // 5. Reveal the narration box
-      setTimeout(() => {
-        document.getElementById('narrationBox').classList.add('show');
-      }, 2000);
-    }
-
-    function goToNextStage() {
-      window.location.href = "stage2.html"; 
-    }
-  </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
