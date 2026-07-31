@@ -15,7 +15,6 @@
        COLOR PALETTE & GLOBAL STYLES
        Chelsea Blue: #001489
        Yellow Accent: #FFD100
-       Sky Blue: #87CEEB
        ========================================== */
     * {
       box-sizing: border-box;
@@ -35,13 +34,38 @@
       position: relative;
     }
 
+    /* Floating Music Toggle Button */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #FFD100;
+      color: #001489;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+    }
+
     /* Container for Map Area */
     .map-wrapper {
       position: relative;
       width: 90%;
       max-width: 600px;
       height: 420px;
-      background: #e8ecef url('https://tile.openstreetmap.org/13/6281/3820.png') center/cover; /* Standard map tile layout */
+      background: #e8ecef url('https://tile.openstreetmap.org/13/6281/3820.png') center/cover;
       border-radius: 16px;
       border: 4px solid #FFD100;
       box-shadow: 0 12px 30px rgba(0,0,0,0.4);
@@ -51,7 +75,6 @@
       align-items: center;
     }
 
-    /* Decorative Vintage Map Overlay */
     .map-overlay {
       position: absolute;
       inset: 0;
@@ -59,9 +82,7 @@
       pointer-events: none;
     }
 
-    /* ==========================================
-       1. CLOUD TRANSITION ANIMATION
-       ========================================== */
+    /* 1. CLOUD TRANSITION */
     .cloud-curtain {
       position: absolute;
       inset: 0;
@@ -74,7 +95,6 @@
       transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
     }
 
-    /* Styling soft cloud shapes */
     .cloud-shape {
       width: 120%;
       height: 100%;
@@ -84,15 +104,12 @@
       top: 0;
     }
 
-    /* Class added via JS to lift clouds off */
     .cloud-curtain.lift-off {
       transform: translateY(-100%);
       opacity: 0;
     }
 
-    /* ==========================================
-       2. MEDAN PIN POINT & RIPPLE ANIMATION
-       ========================================== */
+    /* 2. MEDAN PIN POINT & RIPPLE */
     .pin-container {
       position: absolute;
       top: 45%;
@@ -102,7 +119,7 @@
       flex-direction: column;
       align-items: center;
       z-index: 10;
-      opacity: 0; /* Hidden until clouds lift */
+      opacity: 0;
     }
 
     .pin-container.drop {
@@ -113,7 +130,7 @@
     .map-pin {
       width: 42px;
       height: 42px;
-      background-color: #d9534f; /* Red Pin Point */
+      background-color: #d9534f;
       border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg);
       border: 3px solid #ffffff;
@@ -144,7 +161,6 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    /* Pulsing Ripple Effect */
     .pulse-ring {
       position: absolute;
       width: 20px;
@@ -157,28 +173,16 @@
     }
 
     @keyframes dropBounce {
-      0% {
-        transform: translate(-50%, -200px);
-      }
-      100% {
-        transform: translate(-50%, -50%);
-      }
+      0% { transform: translate(-50%, -200px); }
+      100% { transform: translate(-50%, -50%); }
     }
 
     @keyframes pulsate {
-      0% {
-        transform: scale(0.1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(3);
-        opacity: 0;
-      }
+      0% { transform: scale(0.1); opacity: 1; }
+      100% { transform: scale(3); opacity: 0; }
     }
 
-    /* ==========================================
-       3. NARRATION BANNER
-       ========================================== */
+    /* 3. NARRATION BANNER */
     .narration-box {
       margin-top: 25px;
       background-color: #ffffff;
@@ -204,7 +208,6 @@
       line-height: 1.2;
     }
 
-    /* Next Button (Navigates to photos or passcode) */
     .btn-next {
       margin-top: 15px;
       background-color: #FFD100;
@@ -226,6 +229,14 @@
   </style>
 </head>
 <body>
+
+  <!-- Audio Element (Tulus - Cahaya) -->
+  <audio id="bgMusic" loop>
+    <source src="cahaya.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Music Control Button -->
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
 
   <!-- Map Container -->
   <div class="map-wrapper">
@@ -251,15 +262,33 @@
   </div>
 
   <script>
-    // Trigger sequence when page finishes loading
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    // Toggle Play/Pause for Music
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = '🎵';
+      } else {
+        music.pause();
+        musicBtn.textContent = '🔇';
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+
+      // Try playing audio automatically when page loads
+      music.play().catch(error => {
+        console.log("Autoplay waiting for user interaction:", error);
+      });
 
       // Step 1: Lift off clouds after 0.5s
       setTimeout(() => {
         document.getElementById('cloudCurtain').classList.add('lift-off');
       }, 500);
 
-      // Step 2: Drop the map pin onto Medan after clouds move (1.5s mark)
+      // Step 2: Drop map pin (1.5s mark)
       setTimeout(() => {
         document.getElementById('medanPin').classList.add('drop');
       }, 1500);
@@ -271,9 +300,7 @@
 
     });
 
-    // Navigation function for the next stage
     function goToNextStage() {
-      // Directs to your childhood photo gallery or Passcode #2 page
       window.location.href = "stage2.html"; 
     }
   </script>
