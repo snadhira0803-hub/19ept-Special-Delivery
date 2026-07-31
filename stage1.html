@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stage 1: Medan</title>
+  
+  <!-- Google Fonts: Handwritten font (Caveat) + Clean font (Montserrat) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================
+       COLOR PALETTE & GLOBAL STYLES
+       Chelsea Blue: #001489
+       Yellow Accent: #FFD100
+       Sky Blue: #87CEEB
+       ========================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #001489;
+      font-family: 'Caveat', cursive;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Container for Map Area */
+    .map-wrapper {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      height: 420px;
+      background: #e8ecef url('https://tile.openstreetmap.org/13/6281/3820.png') center/cover; /* Standard map tile layout */
+      border-radius: 16px;
+      border: 4px solid #FFD100;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Decorative Vintage Map Overlay */
+    .map-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 40%, rgba(0, 20, 137, 0.4) 100%);
+      pointer-events: none;
+    }
+
+    /* ==========================================
+       1. CLOUD TRANSITION ANIMATION
+       ========================================== */
+    .cloud-curtain {
+      position: absolute;
+      inset: 0;
+      background-color: #ffffff;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
+    }
+
+    /* Styling soft cloud shapes */
+    .cloud-shape {
+      width: 120%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 50% 50% 0 0;
+      position: absolute;
+      top: 0;
+    }
+
+    /* Class added via JS to lift clouds off */
+    .cloud-curtain.lift-off {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    /* ==========================================
+       2. MEDAN PIN POINT & RIPPLE ANIMATION
+       ========================================== */
+    .pin-container {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      opacity: 0; /* Hidden until clouds lift */
+    }
+
+    .pin-container.drop {
+      opacity: 1;
+      animation: dropBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .map-pin {
+      width: 42px;
+      height: 42px;
+      background-color: #d9534f; /* Red Pin Point */
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .map-pin::after {
+      content: '';
+      width: 14px;
+      height: 14px;
+      background-color: #ffffff;
+      position: absolute;
+      border-radius: 50%;
+      top: 11px;
+      left: 11px;
+    }
+
+    .location-label {
+      background-color: #001489;
+      color: #FFD100;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-top: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Pulsing Ripple Effect */
+    .pulse-ring {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #d9534f;
+      border-radius: 50%;
+      top: 25px;
+      animation: pulsate 1.8s ease-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes dropBounce {
+      0% {
+        transform: translate(-50%, -200px);
+      }
+      100% {
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @keyframes pulsate {
+      0% {
+        transform: scale(0.1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    /* ==========================================
+       3. NARRATION BANNER
+       ========================================== */
+    .narration-box {
+      margin-top: 25px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 15px 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .narration-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .narration-text {
+      color: #001489;
+      font-size: 2.2rem;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+
+    /* Next Button (Navigates to photos or passcode) */
+    .btn-next {
+      margin-top: 15px;
+      background-color: #FFD100;
+      color: #001489;
+      border: none;
+      padding: 10px 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+      font-size: 0.95rem;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .btn-next:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Map Container -->
+  <div class="map-wrapper">
+    <div class="map-overlay"></div>
+
+    <!-- Cloud Transition Curtain -->
+    <div class="cloud-curtain" id="cloudCurtain">
+      <div class="cloud-shape"></div>
+    </div>
+
+    <!-- Medan Pin Point -->
+    <div class="pin-container" id="medanPin">
+      <div class="map-pin"></div>
+      <div class="pulse-ring"></div>
+      <div class="location-label">📍 Medan, Indonesia</div>
+    </div>
+  </div>
+
+  <!-- Narration Banner -->
+  <div class="narration-box" id="narrationBox">
+    <div class="narration-text">"26 years ago, a boy was born..."</div>
+    <button class="btn-next" onclick="goToNextStage()">Continue ✨</button>
+  </div>
+
+  <script>
+    // Trigger sequence when page finishes loading
+    window.addEventListener('DOMContentLoaded', () => {
+
+      // Step 1: Lift off clouds after 0.5s
+      setTimeout(() => {
+        document.getElementById('cloudCurtain').classList.add('lift-off');
+      }, 500);
+
+      // Step 2: Drop the map pin onto Medan after clouds move (1.5s mark)
+      setTimeout(() => {
+        document.getElementById('medanPin').classList.add('drop');
+      }, 1500);
+
+      // Step 3: Reveal narration text (2.3s mark)
+      setTimeout(() => {
+        document.getElementById('narrationBox').classList.add('show');
+      }, 2300);
+
+    });
+
+    // Navigation function for the next stage
+    function goToNextStage() {
+      // Directs to your childhood photo gallery or Passcode #2 page
+      window.location.href = "stage2.html"; 
+    }
+  </script>
+
+</body>
+</html>
